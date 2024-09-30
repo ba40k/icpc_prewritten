@@ -52,7 +52,11 @@ namespace icpc
             }
             int get_parent(int vertex)
             {
-                return parent[vertex] = parent[vertex]==vertex?vertex:get_parent(parent[vertex]);
+                if (parent[vertex] == vertex)
+                {
+                    return vertex;
+                }
+            return parent[vertex] = get_parent(parent[vertex]);
             }
             void set_union(int a, int b)
             {
