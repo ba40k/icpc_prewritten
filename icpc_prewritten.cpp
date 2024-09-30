@@ -56,7 +56,7 @@ namespace icpc
                 {
                     return vertex;
                 }
-            return parent[vertex] = get_parent(parent[vertex]);
+                 return parent[vertex] = get_parent(parent[vertex]);
             }
             void set_union(int a, int b)
             {
