@@ -60,11 +60,16 @@ namespace icpc
             }
             void set_union(int a, int b)
             {
-                a = get_parent(a);
-                b = get_parent(b);
-                len[a]<len[b]?std::swap(a,b):std::swap(a,a);
-                len[a] += len[b];
-                parent[b] = a;
+                 a = get_parent(a);
+                 b = get_parent(b);
+                 if (len[a] < len[b])
+                 {
+                     len[b] += len[a];
+                    parent[a] = b;
+                    return ;
+                 }
+                 len[a] += len[b];
+                 parent[b] = a;
             }
     };
  // алгосы тут 
