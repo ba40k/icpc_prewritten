@@ -3,6 +3,19 @@
 #include <algorithm>
 namespace icpc
 {
+    void EuelerTourForTree(int vertex, int parent, int depth, std::vector<std::vector<int>>& graph, std::vector<std::pair<int, int>>& eueler_tour)
+    {
+        eueler_tour.push_back({ vertex,depth });
+        int cur_vertex = vertex;
+        for (int next_vertex : graph[vertex])
+        {
+            if (next_vertex != parent)
+            {
+                EuelerTourForTree(next_vertex, vertex, depth + 1, graph, eueler_tour);
+                eueler_tour.push_back({ vertex,depth });
+            }
+        }
+    }
     class SqrtDec // пустой шаблон
     {
     private : 
