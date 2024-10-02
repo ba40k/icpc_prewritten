@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cstdint>
+#include <limits>
+
 namespace icpc
 {
     void EuelerTourForTree(int vertex, int parent, int depth, std::vector<std::vector<int>>& graph, std::vector<std::pair<int, int>>& eueler_tour)
@@ -85,6 +88,120 @@ namespace icpc
                  parent[b] = a;
             }
     };
+
+namespace segtree // icpc::segtree
+{
+class JiDriverRemainder
+{
+    struct Node
+    {
+        int64_t maxNum;
+        int64_t sum;
+    };
+
+    std::vector<Node> tree;
+    int size;
+
+    void init(int n)
+    {
+        size = 1;
+        while (size < n) {
+            size *= 2;
+        }
+        tree.resize(size * 2 - 1);
+    }
+
+    inline void updateFromChildren(int x)
+    {
+        tree[x].maxNum = std::max(tree[2 * x + 1].maxNum, tree[2 * x + 2].maxNum);
+        tree[x].sum = tree[2 * x + 1].sum + tree[2 * x + 2].sum;
+    }
+
+    void build(int x, int lx, int rx, const std::vector<int64_t> &v)
+    {
+        if (rx - lx == 1) {
+            if (lx < v.size()) {
+                tree[x].maxNum = tree[x].sum = v[lx];
+            }
+            return;
+        }
+        int m = (lx + rx) / 2;
+        build(2 * x + 1, lx, m, v);
+        build(2 * x + 2, m, rx, v);
+        updateFromChildren(x);
+    }
+
+    void updateModEqual(int64_t value, int l, int r, int x, int lx, int rx)
+    {
+        bool breakCondition = (lx >= r) || (rx <= l) || (tree[x].maxNum < value);
+        if (breakCondition) {
+            return;
+        }
+
+        if (rx - lx == 1) {
+            tree[x].maxNum %= value;
+            tree[x].sum = tree[x].maxNum;
+            return;
+        }
+
+        int m = (lx + rx) / 2;
+        updateModEqual(value, l, r, 2 * x + 1, lx, m);
+        updateModEqual(value, l, r, 2 * x + 2, m, rx);
+        updateFromChildren(x);
+    }
+
+    void updateEqual(int index, int64_t value, int x, int lx, int rx)
+    {
+        if (rx - lx == 1) {
+            tree[x].sum = tree[x].maxNum = value;
+            return;
+        }
+        int m = (lx + rx) / 2;
+        if (index < m) {
+            updateEqual(index, value, 2 * x + 1, lx, m);
+        }
+        else {
+            updateEqual(index, value, 2 * x + 2, m, rx);
+        }
+        updateFromChildren(x);
+    }
+
+    int64_t findSum(int l, int r, int x, int lx, int rx)
+    {
+        if (lx >= r || rx <= l) {
+            return 0LL;
+        }
+        if (lx >= l && rx <= r) {
+            return tree[x].sum;
+        }
+        int m = (lx + rx) / 2;
+        return findSum(l, r, 2 * x + 1, lx, m) + findSum(l, r, 2 * x + 2, m, rx);
+    }
+
+public:
+    JiDriverRemainder(const std::vector<int64_t> &v)
+    {
+        init(v.size());
+        build(0, 0, size, v);
+    }
+
+    void updateModEqual(int64_t value, int l, int r)
+    {
+        updateModEqual(value, l, r, 0, 0, size);
+    }
+
+    void updateEqual(int index, int64_t value)
+    {
+        updateEqual(index, value, 0, 0, size);
+    }
+
+    int64_t findSum(int l, int r)
+    {
+        return findSum(l, r, 0, 0, size);
+    }
+};
+    }
+
  // алгосы тут 
 }
 
