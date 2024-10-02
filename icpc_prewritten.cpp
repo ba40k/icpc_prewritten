@@ -332,6 +332,84 @@ public:
     }
 };
 
+class SegtreeEqual
+{
+    struct Node
+    {
+        int64_t value;
+        bool flag = false;
+    };
+    std::vector<Node> tree;
+    int size;
+
+    void init(int n)
+    {
+        size = 1;
+        while (size < n) size *= 2;
+        tree.assign(size * 2 - 1, {0, false});
+    }
+
+    inline void propagate(int x)
+    {
+        if (!tree[x].flag) return;
+        tree[2 * x + 2] = tree[2 * x + 1] = tree[x];
+        tree[x].flag = false;
+    }
+    void set(int l, int r, int64_t v, int x, int lx, int rx)
+    {
+        if (tree[x].flag && rx - lx != 1) propagate(x);
+        if (lx >= l && rx <= r) {
+            tree[x].value = v;
+            tree[x].flag = true;
+            return;
+        }
+        if (lx >= r || rx <= l) return;
+
+        int m = (lx + rx) / 2;
+        set(l, r, v, 2 * x + 1, lx, m);
+        set(l, r, v, 2 * x + 2, m, rx);
+
+    }
+    int64_t get(int i, int x, int lx, int rx)
+    {
+        if (rx - lx != 1) propagate(x);
+        else return tree[x].value;
+
+        int m = (lx + rx) / 2;
+        if (i < m) return get(i, 2 * x + 1, lx, m);
+        else return get(i, 2 * x + 2, m, rx);
+    }
+    void build(int x, int lx, int rx, const std::vector<int64_t> &v)
+    {
+        if (rx - lx == 1) {
+            if (lx < v.size()) {
+                tree[x].value = v[lx];
+                tree[x].flag = false;
+            }
+            return;
+        }
+        int m = (lx + rx) / 2;
+        build(2 * x + 1, lx, m, v);
+        build(2 * x + 2, m, rx, v);
+    }
+public:
+    SegtreeEqual(const std::vector<int64_t> &v)
+    {
+        init(v.size());
+        build(0, 0, size, v);
+    }
+
+    void set(int l, int r, int64_t value)
+    {
+        set(l, r, value, 0, 0, size);
+    }
+
+    int64_t get(int index)
+    {
+        return get(index, 0, 0, size);
+    }
+};
+
 }
 
  // алгосы тут 
