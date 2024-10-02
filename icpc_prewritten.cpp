@@ -266,6 +266,72 @@ public:
     }
 };
 
+class RmqSegtree
+{
+    std::vector<int64_t> tree;
+    const int64_t INF = std::numeric_limits<int64_t>::max() / 2;
+    int size;
+    void init(int n)
+    {
+        size = 1;
+        while (size < n) size *= 2;
+        tree.assign(2 * size - 1, INF);
+    }
+    void set(int i, int64_t v, int x, int lx, int rx)
+    {
+        if (rx - lx == 1) {
+            tree[x] = v;
+            return;
+        }
+        int m = (lx + rx) / 2;
+        if (i < m) {
+            set(i, v, 2 * x + 1, lx, m);
+        }
+        else {
+            set(i, v, 2 * x + 2, m, rx);
+        }
+        tree[x] = std::min(tree[2 * x + 1], tree[2 * x + 2]);
+    }
+    int64_t min(int l, int r, int x, int lx, int rx)
+    {
+        if (l >= rx || lx >= r) return INF;
+        if (lx >= l && rx <= r) return tree[x];
+        int m = (lx + rx) / 2;
+        int64_t min1 = min(l, r, 2 * x + 1, lx, m);
+        int64_t min2 = min(l, r, 2 * x + 2, m, rx);
+        return std::min(min1, min2);
+    }
+
+    void build(int x, int lx, int rx, const std::vector<int64_t> &v)
+    {
+        if (rx - lx == 1) {
+            if (lx < v.size())
+                tree[x] = v[lx];
+            return;
+        }
+        int m = (lx + rx) / 2;
+        build(2 * x + 1, lx, m, v);
+        build(2 * x + 2, m, rx, v);
+        tree[x] = std::min(tree[2 * x + 1], tree[2 * x + 2]);
+    }
+public:
+    void set(int i, int64_t v)
+    {
+        set(i, v, 0, 0, size);
+    }
+
+    int64_t min(int l, int r)
+    {
+        return min(l, r, 0, 0, size);
+    }
+
+    RmqSegtree(const std::vector<int64_t> &v)
+    {
+        init(v.size());
+        build(0, 0, size, v);
+    }
+};
+
 }
 
  // алгосы тут 
