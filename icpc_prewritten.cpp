@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <limits>
 
+using namespace std;
+
 namespace icpc
 {
     class testing_system
@@ -495,6 +497,79 @@ public:
         return get(index, 0, 0, size);
     }
 };
+
+vector<int> z_function(string s)
+{
+    int n = (int) s.length();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min(r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
+    }
+    return z;
+}
+
+vector<int> prefix_function(string s)
+{
+    int n = (int) s.length();
+    vector<int> pi(n);
+    for (int i = 1; i < n; ++i) {
+        int j = pi[i - 1];
+        while (j > 0 && s[i] != s[j])
+            j = pi[j - 1];
+        if (s[i] == s[j]) ++j;
+        pi[i] = j;
+    }
+    return pi;
+}
+
+void sufmas(string s, int n)
+{
+    const int alphabet = 26;
+    const int maxlen = 1e6;
+    int p[maxlen], cnt[maxlen], c[maxlen];
+    memset(cnt, 0, alphabet * sizeof(int));
+    for (int i = 0; i < n; ++i)
+        ++cnt[s[i]];
+    for (int i = 1; i < alphabet; ++i)
+        cnt[i] += cnt[i - 1];
+    for (int i = 0; i < n; ++i)
+        p[--cnt[s[i]]] = i;
+    c[p[0]] = 0;
+    int classes = 1;
+    for (int i = 1; i < n; ++i) {
+        if (s[p[i]] != s[p[i - 1]]) ++classes;
+        c[p[i]] = classes - 1;
+    }
+
+    int pn[maxlen], cn[maxlen];
+    for (int h = 0; (1 << h) < n; ++h) {
+        for (int i = 0; i < n; ++i) {
+            pn[i] = p[i] - (1 << h);
+            if (pn[i] < 0) pn[i] += n;
+        }
+        memset(cnt, 0, classes * sizeof(int));
+        for (int i = 0; i < n; ++i)
+            ++cnt[c[pn[i]]];
+        for (int i = 1; i < classes; ++i)
+            cnt[i] += cnt[i - 1];
+        for (int i = n - 1; i >= 0; --i)
+            p[--cnt[c[pn[i]]]] = pn[i];
+        cn[p[0]] = 0;
+        classes = 1;
+        for (int i = 1; i < n; ++i) {
+            int mid1 = (p[i] + (1 << h)) % n, mid2 = (p[i - 1] + (1 << h)) % n;
+            if (c[p[i]] != c[p[i - 1]] || c[mid1] != c[mid2])
+                ++classes;
+            cn[p[i]] = classes - 1;
+        }
+        memcpy(c, cn, n * sizeof(int));
+    }
+}
 
 }
 
