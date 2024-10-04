@@ -3,179 +3,176 @@
 #include <algorithm>
 #include <cstdint>
 #include <limits>
+#include <cstring>
 
 using namespace std;
 
 namespace icpc
 {
-    class testing_system
+class testing_system
+{
+    class test
     {
-    	class test
-	    {
-	    public:
-		    // то в каком виде хранится тест, указать руками
-		    test()
-		    {
-    
-		    }
-		    void show_test()
-		    {
-    			// логика отображения теста
-		    }
-	    };
-	    class test_generator
-	    {
-	    private:
-    		test current;
-		    
-		    test generate_test() // аргументы если надо как-то ограничить генерацию
-		    {
-    			// логика рандомно создающая тест
-    
-    
-			    //
-			    // присвоить потом это в current
-		    }
-    	public:
-	    	test_generator()
-		    {
-    
-	    	}
-		    test get_test() // аргументы если надо как-то ограничить генерацию
-		    {    
-			    return generate_test(); // не забыть про аргументы если они есть
-		    }
-
-	};
-	class solution
-	{
-	public:
-		solution()
-		{
-
-		}
-		int get_result_from_stupid(test current) // тип данных зависящий от задачи
-		{
-			int result;
-			// логика stupid-решения
-
-
-			return result;
-		}
-		int get_result_from_smart(test current)
-		{
-			int result;
-			// логика smart-решения
-
-			return result;
-		}
-	};
-public:
-	test_generator genereator;
-	solution cur_solution;
-	testing_system()
-	{
-
-	}
-	void test_solution(int iterations) // сколько раз надо протестировать
-	{
-		for (int i = 0; i < iterations; i++)
-		{
-			test random_test;
-			if (cur_solution.get_result_from_smart(random_test) != cur_solution.get_result_from_stupid(random_test))
-			{
-				cout << "MISTAKE DETECTED ! \n";
-				cout << "======\n";
-				random_test.show_test();
-				cout << "======\n";
-			}
-			
-		}
-	}
-};
-
-    void EuelerTourForTree(int vertex, int parent, int depth, std::vector<std::vector<int>>& graph, std::vector<std::pair<int, int>>& eueler_tour)
-    {
-        eueler_tour.push_back({ vertex,depth });
-        int cur_vertex = vertex;
-        for (int next_vertex : graph[vertex])
+    public:
+        // то в каком виде хранится тест, указать руками
+        test()
         {
-            if (next_vertex != parent)
-            {
-                EuelerTourForTree(next_vertex, vertex, depth + 1, graph, eueler_tour);
-                eueler_tour.push_back({ vertex,depth });
-            }
+
         }
-    }
-    class SqrtDec // пустой шаблон
+        void show_test()
+        {
+            // логика отображения теста
+        }
+    };
+    class test_generator
     {
-    private : 
-        const int k = 8;
-        int block_size = 1 << k; // default 
+    private:
+        test current;
 
-        struct node
+        test generate_test() // аргументы если надо как-то ограничить генерацию
         {
-           
-        };
-        std::vector<node>  dec;
-        std::vector<int> vec;
-        void build(std::vector<int>& input)
-        {
-            vec = input;
-            dec.resize((input.size()>>k) + 1);
-            for (int i = 0; i < input.size(); ++i)
-            {
-                // creating
-            }
+            // логика рандомно создающая тест
+
+
+            //
+            // присвоить потом это в current
         }
     public:
-        SqrtDec(std::vector<int>& input)
+        test_generator()
         {
-            build(input);
+
         }
-        
+        test get_test() // аргументы если надо как-то ограничить генерацию
+        {
+            return generate_test(); // не забыть про аргументы если они есть
+        }
+
     };
-    class Dsu // базовая дсу 
+    class solution
     {
-        private:
-            std::vector<int> parent;
-            std::vector<int> len;
-            void build (int n)
-            {
-                parent.resize(n);
-                len.resize(n,1);
-                for (int i =0;i<n;++i) 
-                {
-                    parent[i] = i;
-                }
-            }
-        public:
-            Dsu(int n)
-            {
-                build(n);
-            }
-            int get_parent(int vertex)
-            {
-                if (parent[vertex] == vertex)
-                {
-                    return vertex;
-                }
-                 return parent[vertex] = get_parent(parent[vertex]);
-            }
-            void set_union(int a, int b)
-            {
-                 a = get_parent(a);
-                 b = get_parent(b);
-                 if (len[a] < len[b])
-                 {
-                     len[b] += len[a];
-                    parent[a] = b;
-                    return ;
-                 }
-                 len[a] += len[b];
-                 parent[b] = a;
-            }
+    public:
+        solution()
+        {
+
+        }
+        int get_result_from_stupid(test current) // тип данных зависящий от задачи
+        {
+            int result;
+            // логика stupid-решения
+
+
+            return result;
+        }
+        int get_result_from_smart(test current)
+        {
+            int result;
+            // логика smart-решения
+
+            return result;
+        }
     };
+public:
+    test_generator genereator;
+    solution cur_solution;
+    testing_system()
+    {
+
+    }
+    void test_solution(int iterations) // сколько раз надо протестировать
+    {
+        for (int i = 0; i < iterations; i++) {
+            test random_test;
+            if (cur_solution.get_result_from_smart(random_test) != cur_solution.get_result_from_stupid(random_test)) {
+                cout << "MISTAKE DETECTED ! \n";
+                cout << "======\n";
+                random_test.show_test();
+                cout << "======\n";
+            }
+
+        }
+    }
+};
+
+void EuelerTourForTree(int vertex,
+                       int parent,
+                       int depth,
+                       std::vector<std::vector<int>> &graph,
+                       std::vector<std::pair<int, int>> &eueler_tour)
+{
+    eueler_tour.emplace_back(vertex, depth);
+    int cur_vertex = vertex;
+    for (int next_vertex: graph[vertex]) {
+        if (next_vertex != parent) {
+            EuelerTourForTree(next_vertex, vertex, depth + 1, graph, eueler_tour);
+            eueler_tour.emplace_back(vertex, depth);
+        }
+    }
+}
+class SqrtDec // пустой шаблон
+{
+private :
+    const int k = 8;
+    int block_size = 1 << k; // default
+
+    struct node
+    {
+
+    };
+    std::vector<node> dec;
+    std::vector<int> vec;
+    void build(std::vector<int> &input)
+    {
+        vec = input;
+        dec.resize((input.size() >> k) + 1);
+        for (int i = 0; i < input.size(); ++i) {
+            // creating
+        }
+    }
+public:
+    SqrtDec(std::vector<int> &input)
+    {
+        build(input);
+    }
+
+};
+class Dsu // базовая дсу
+{
+private:
+    std::vector<int> parent;
+    std::vector<int> len;
+    void build(int n)
+    {
+        parent.resize(n);
+        len.resize(n, 1);
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
+        }
+    }
+public:
+    Dsu(int n)
+    {
+        build(n);
+    }
+    int get_parent(int vertex)
+    {
+        if (parent[vertex] == vertex) {
+            return vertex;
+        }
+        return parent[vertex] = get_parent(parent[vertex]);
+    }
+    void set_union(int a, int b)
+    {
+        a = get_parent(a);
+        b = get_parent(b);
+        if (len[a] < len[b]) {
+            len[b] += len[a];
+            parent[a] = b;
+            return;
+        }
+        len[a] += len[b];
+        parent[b] = a;
+    }
+};
 
 namespace segtree // icpc::segtree
 {
@@ -497,7 +494,7 @@ public:
         return get(index, 0, 0, size);
     }
 };
-
+}
 vector<int> z_function(string s)
 {
     int n = (int) s.length();
@@ -573,14 +570,11 @@ void sufmas(string s, int n)
 
 }
 
- // алгосы тут 
-}
-
 int main()
 {
     std::ios_base::sync_with_stdio(0);
     std::cin.tie(0);
     std::cout.tie(0);
     //обращение к алгосам  icpc::
-    
+
 }
