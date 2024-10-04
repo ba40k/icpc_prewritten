@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <limits>
+#include <cstring>
 
 using namespace std;
 
@@ -575,5 +576,5 @@ int main()
     std::cin.tie(0);
     std::cout.tie(0);
     //обращение к алгосам  icpc::
-    
+
 }
